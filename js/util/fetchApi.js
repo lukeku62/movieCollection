@@ -19,7 +19,8 @@ export const randomMovie = async () => {
     let data = await response.json();
     let titolo = data.Title;
     let poster = data.Poster;
-    if(typeof titolo === 'undefined' || typeof poster === undefined){
+    if(typeof titolo === 'undefined' || typeof poster === undefined || await fetch(poster.url) == 404){
+        
         return randomMovie();
     }
 

@@ -3,12 +3,14 @@ import {randomMovie} from './util/fetchApi.js'
 
 export const addMovie = async () => {
 
-    const movie = randomMovie();
+    const movie = await randomMovie();
 
     console.log(movie.Poster);
     console.log(movie.Title);
     console.log(movie.Year);
     console.log(movie.Genre);
+    const column = document.createElement('div');
+    column.classList.add('col');
     const lista = document.getElementById('movieList');
 
     const card = document.createElement('div');
@@ -19,9 +21,10 @@ export const addMovie = async () => {
     card.classList.add('text-white');
     card.classList.add('darkCard');
 
-    // const img = new Image();
-    // img.src = movie.Poster;
-    // img.classList.add('card-image-top');
+    const img = new Image();
+    img.src = movie.Poster;
+    img.classList.add('card-image-top');
+    img.classList.add('poster');
 
     const cardBody = document.createElement('div');
     cardBody.classList.add('card-body');
@@ -40,9 +43,11 @@ export const addMovie = async () => {
     cardBody.appendChild(year);
     cardBody.appendChild(genre);
 
-    //card.appendChild(img);
+    card.appendChild(img);
     card.appendChild(cardBody);
 
-    lista.appendChild(card);
+    column.appendChild(card);
+
+    lista.appendChild(column);
     
 }
