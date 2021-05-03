@@ -9,90 +9,67 @@
     <link rel="stylesheet" href="./css/style.css"/>
     <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Netflix_icon.svg/1200px-Netflix_icon.svg.png"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    
 </head>
-<body class="p-3 mb-2 bg-dark text-white">
+<body class="p-3 mb-2 bg-dark text-white" id="corpo">
 
   <script type="module">
     
-    import {addMovie} from "./js/mainModule.js";
+    import {callTrendingMovies} from "./js/mainModule.js";
 
+    window.callTrendingMovies=callTrendingMovies;
     
-    window.addMovie=addMovie;
     
 </script>
   
 <script>
-  const callAddMovie = () => window.addMovie();
+  const callTrendingMovie = () => window.callTrendingMovies();
+
+  window.onload = () => {
+    window.callTrendingMovies();
+  }
 </script>
   
   
-  
-  
-  
-  
-  
-  
-  
-  <h1 class="display-1"><a href="https://fontmeme.com/netflix-font/"><img src="https://fontmeme.com/permalink/210330/22043d3ce74e27a1956aedc7f8ea5d9f.png" alt="netflix-font" border="0"></a></h1>
-    <hr>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="./index.html"><h1 class="display-1"><img src="https://fontmeme.com/permalink/210330/22043d3ce74e27a1956aedc7f8ea5d9f.png" alt="netflix-font" border="0"></h1></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Movies</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./tvSeries.html">TV Series</a>
+            </li>
+            
+          </ul>
+          <form class="d-flex">
+            <input id="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-danger" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
 
-    <button onclick="callAddMovie()" class="btn btn-danger mb-3">Tester</button>
     
+
     
     <div class="container">
 
       <div class="row" id='movieList'>
 
-
-
-
-
       </div>
 
     </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
+  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 </body>
 </html>

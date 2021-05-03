@@ -21,7 +21,20 @@
     width: 18rem; 
     height: 35rem; 
     border-style: hidden; 
-    box-shadow: 0 4px 8px 0 rgba(196, 196, 196, 0.2), 0 6px 20px 0 rgba(196, 196, 196, 0.19)
+    box-shadow: 0 4px 8px 0 rgba(196, 196, 196, 0.2), 0 6px 20px 0 rgba(196, 196, 196, 0.19);
+    transition: transform .5s;
+}
+
+.front{
+    visibility: visible;
+}
+
+.back{
+    visibility: hidden;
+}
+
+.darkCard:hover{
+    transform: scale(1.15);
 }
 
 .poster{
@@ -29,5 +42,12 @@
     height: 100%; 
     object-fit: cover;
 }
+
+
+
+.activeRed {
+    color: #E50914;
+}
+
 
 
