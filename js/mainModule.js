@@ -1,4 +1,4 @@
-import {randomMovie, trendingMovies, trendingTvSeries} from './util/fetchApi.js'
+import {trendingMovies, trendingTvSeries} from './util/fetchApi.js'
 
 
 
