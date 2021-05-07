@@ -1,5 +1,5 @@
 import { trendingMovies, trendingTvSeries } from './util/fetchApi.js'
-import { makeMediaCard, addModal, getMediaModal } from './util/dynamicCreation.js'
+import { makeMediaCard, addModal, getMovieModal, getTvSerieModal } from './util/dynamicCreation.js'
 
 //funzione che genera una lista di film di tendenza
 export const callTrendingMovies = async () => {
@@ -14,7 +14,7 @@ export const callTrendingMovies = async () => {
         console.log(error);
     }
     addModal();
-    getMediaModal();
+    getMovieModal();
 }
 
 //funzione che crea una lista di serie tv di tendenza
@@ -29,7 +29,8 @@ export const callTrendingTvSeries = async () => {
     } catch (error) {
         console.log(error);
     }
-    
+    addModal();
+    getTvSerieModal();
 }
 
 

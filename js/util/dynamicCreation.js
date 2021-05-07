@@ -120,7 +120,7 @@ export const addModal = () => {
 
 }
 
-export const getMediaModal = () => {
+export const getMovieModal = () => {
 
     const exampleModal = document.getElementById('exampleModal');
     exampleModal.addEventListener('show.bs.modal', async function (event) {
@@ -130,6 +130,37 @@ export const getMediaModal = () => {
 
         const media = await findMovieById(recipient);
         const title = media.title;
+        const overview = media.overview;
+        const backdrop = media.backdrop_path;
+
+        const modalTitle = exampleModal.querySelector('.modal-title');
+        modalTitle.textContent = title;
+        
+        const img = new Image();
+        img.src = `https://image.tmdb.org/t/p/w300${backdrop}`;
+        img.classList.add('poster');
+
+        const descrizione = document.createElement('div');
+        descrizione.innerHTML=overview;
+
+        const modalBody = exampleModal.querySelector('.modal-body img');
+        modalBody.src = img.src; 
+        
+        const modalFooter = exampleModal.querySelector('.modal-footer');
+        modalFooter.textContent = overview;
+    })
+}
+
+export const getTvSerieModal = () => {
+
+    const exampleModal = document.getElementById('exampleModal');
+    exampleModal.addEventListener('show.bs.modal', async function (event) {
+        
+        const button = event.relatedTarget;
+        const recipient = button.getAttribute('data-bs-whatever');
+
+        const media = await findTvSerieById(recipient);
+        const title = media.name;
         const overview = media.overview;
         const backdrop = media.backdrop_path;
 
