@@ -1,4 +1,4 @@
-import { trendingMovies, trendingTvSeries } from './util/fetchApi.js'
+import { trendingMovies, trendingTvSeries, searchMovie, searchTvSerie} from './util/fetchApi.js'
 import { makeMediaCard, addModal, getMovieModal, getTvSerieModal } from './util/dynamicCreation.js'
 
 //funzione che genera una lista di film di tendenza
@@ -34,6 +34,34 @@ export const callTrendingTvSeries = async () => {
 }
 
 
+
+
+
+
+export const searchMedia = async (event) => {
+    event.preventDefault();
+    try {
+        const input = document.getElementById('search').value;
+        document.getElementById('movieList').innerHTML="";
+        const responseMovie = await searchMovie(input);
+        const arrayMovie = responseMovie.results;
+
+        const responseTv = await searchTvSerie(input);
+        const arrayTv = responseTv.results;
+        const arrayPocho = arrayMovie.concat(arrayTv);
+        console.log(arrayPocho);
+        
+        //per ogni elemento creo una card
+        arrayPocho.forEach(element => {
+            makeMediaCard(element);
+        });
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+document.getElementById('searchForm').onsubmit=searchMedia;
 
 
 

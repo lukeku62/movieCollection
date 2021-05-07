@@ -5,11 +5,11 @@ export const makeMediaCard = (element) => {
     //estrazione attributi
     let title = '';
     let year = '';
-    if (element.media_type == 'movie') {
+    if (element.name == undefined) {
         title = element.title;
         year = element.release_date.substring(0, 4);
     }
-    else if (element.media_type == 'tv') {
+    else{
         title = element.name;
         year = element.first_air_date.substring(0, 4);
     }
@@ -19,6 +19,8 @@ export const makeMediaCard = (element) => {
     //creazione della card
     const column = document.createElement('div');
     column.classList.add('col');
+    
+    
     const lista = document.getElementById('movieList');
     //creazione card
     const card = document.createElement('div');
@@ -169,7 +171,7 @@ export const getTvSerieModal = () => {
         
         const img = new Image();
         img.src = `https://image.tmdb.org/t/p/w300${backdrop}`;
-        img.classList.add('poster');
+        img.classList.add('img-fluid');
 
         const descrizione = document.createElement('div');
         descrizione.innerHTML=overview;
