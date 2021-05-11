@@ -34,6 +34,7 @@ export const searchMovie = async (query) => {
     
     let response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query}&language=en-US&page=1&include_adult=false`);
     let data = await response.json();
+    
     return data;
 }
 

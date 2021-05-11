@@ -14,19 +14,24 @@
 
   <script type="module">
     
-    import {callTrendingTvSeries} from "./js/mainModule.js";
+    import {callTrendingTvSeries, storeMediaQuery, submitSearch} from "./js/mainModule.js";
 
     window.callTrendingTvSeries=callTrendingTvSeries;
+    window.storeMediaQuery=storeMediaQuery;
+    window.submitSearch=submitSearch;
     
 </script>
   
 <script>
+  const callSubmitSearch = () => window.submitSearch();
   const callTrendingTvSerie = () => window.callTrendingTvSeries();
+  const callStoreMediaQuery = () => window.storeMediaQuery();
 
   window.onload = () => {
     
 
     window.callTrendingTvSeries();
+    callSubmitSearch();
 
   }
 
@@ -49,8 +54,8 @@
           </li>
           
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <form class="d-flex" id="searchQuery">
+          <input id="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-danger" type="submit">Search</button>
         </form>
       </div>
@@ -59,13 +64,51 @@
 
     
     
-    <div id="cacio"></div>
+    
     <div class="container-fluid">
 
       <div class="row justify-content-md-center row-cols-auto" id='movieList'>
 
       </div>
 
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="tvModal" tabindex="-1" aria-labelledby="tvModalTitle" aria-hidden="true" style="color:black">
+      <div class="modal-dialog modal-dialog'centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-title">
+              <div class="position-relative">
+                <h5 id="tvModalTitle"></h5>
+                <h6 id="tvModalYear"></h6>
+              </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col">
+                  <img src="" alt="" id="tvModalBackdrop">
+                </div>
+                <div class="col">
+                  <h6>Genres:</h6>
+                  <span id="tvModalGenres"></span>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                  <h6>Overview:</h6>
+                  <p id="tvModalOverview"></p>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Add to Watch List</button>
+            <button type="button" class="btn btn-primary">Watch</button>
+          </div>
+        </div>
+      </div>
     </div>
     
     

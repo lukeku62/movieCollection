@@ -5,6 +5,7 @@ export const makeMediaCard = (element) => {
     //estrazione attributi
     let title = '';
     let year = '';
+    let b = true;
     if (element.name == undefined) {
         title = element.title;
         year = element.release_date.substring(0, 4);
@@ -12,6 +13,7 @@ export const makeMediaCard = (element) => {
     else{
         title = element.name;
         year = element.first_air_date.substring(0, 4);
+        b = false;
     }
     const poster = element.poster_path;
     const mediaId = element.id;
@@ -31,7 +33,10 @@ export const makeMediaCard = (element) => {
     card.classList.add('darkCard');
     card.setAttribute('type','button');
     card.setAttribute('data-bs-toggle','modal');
-    card.setAttribute('data-bs-target','#exampleModal');
+    if(b == true)
+        card.setAttribute('data-bs-target','#movieModal');
+    else
+        card.setAttribute('data-bs-target','#tvModal');
     card.setAttribute('data-bs-whatever',`${mediaId}`);
     
     //creazione immagine
@@ -48,9 +53,6 @@ export const makeMediaCard = (element) => {
     titolo.innerHTML = title;
     let anno = document.createElement('p');
     anno.innerHTML = year;
-
-    
-    
     //append dei children
     cardBody.appendChild(titolo);
     cardBody.appendChild(anno);
@@ -61,71 +63,10 @@ export const makeMediaCard = (element) => {
 }
 
 
-//crea modal
-export const addModal = () => {
-    
-    const modal = document.createElement('div');
-    modal.classList.add('modal');
-    modal.classList.add('fade');
-    modal.setAttribute('id','exampleModal');
-    modal.setAttribute('tabindex','-1');
-    modal.setAttribute('aria-labelledby','exampleModalLabel');
-    modal.setAttribute('aria-hidden','true');
-
-    const modalDialog = document.createElement('div');
-    modalDialog.classList.add('modal-dialog');
-
-    const modalContent = document.createElement('div');
-    modalContent.classList.add('modal-content');
-
-    const modalHeader = document.createElement('div');
-    modalHeader.classList.add('modal-header');
-    modalHeader.setAttribute('style','color:black;');
-    
-    const modalTitle = document.createElement('h5');
-    modalTitle.classList.add('modal-title');
-    modalTitle.setAttribute('id','exampleModalLabel');
-    
-    modalTitle.innerHTML="cotolettaro";
-
-    const xButton = document.createElement('button');
-    xButton.classList.add('btn-close');
-    xButton.setAttribute('type','button');
-    xButton.setAttribute('data-bs-dismiss','modal');
-    xButton.setAttribute('aria-label','Close');
-
-
-    const modalBody = document.createElement('div');
-    modalBody.classList.add('modal-body');
-    modalBody.setAttribute('style','color:black;');
-    const img = new Image();
-    img.classList.add('poster');
-
-    const modalFooter = document.createElement('div');
-    modalFooter.classList.add('modal-footer');
-    modalFooter.setAttribute('style','color:black;');
-
-    
-
-    modalHeader.appendChild(modalTitle);
-    modalHeader.appendChild(xButton);
-    modalBody.appendChild(img);
-    
-    modalContent.appendChild(modalHeader);
-    modalContent.appendChild(modalBody);
-    modalContent.appendChild(modalFooter);
-    modalDialog.appendChild(modalContent);
-    modal.appendChild(modalDialog)
-    
-    const link = document.getElementById('cacio');
-    link.appendChild(modal);
-
-}
-
 export const getMovieModal = () => {
 
-    const exampleModal = document.getElementById('exampleModal');
-    exampleModal.addEventListener('show.bs.modal', async function (event) {
+    const modalItem = document.getElementById('movieModal');
+    modalItem.addEventListener('show.bs.modal', async function (event) {
         
         const button = event.relatedTarget;
         const recipient = button.getAttribute('data-bs-whatever');
@@ -134,53 +75,92 @@ export const getMovieModal = () => {
         const title = media.title;
         const overview = media.overview;
         const backdrop = media.backdrop_path;
-
-        const modalTitle = exampleModal.querySelector('.modal-title');
-        modalTitle.textContent = title;
+        const genres = media.genres;
+        const genresList = new Array;
+        genres.forEach(element => {
+            genresList.push(element.name);
+        });        
+        const year = media.release_date.substring(0,4); 
         
         const img = new Image();
         img.src = `https://image.tmdb.org/t/p/w300${backdrop}`;
         img.classList.add('poster');
 
-        const descrizione = document.createElement('div');
-        descrizione.innerHTML=overview;
+        const modalTitle = modalItem.querySelector('#movieModalTitle');
+        modalTitle.textContent = title;
 
-        const modalBody = exampleModal.querySelector('.modal-body img');
-        modalBody.src = img.src; 
+        const modalYear = modalItem.querySelector('#movieModalYear');
+        modalYear.textContent = year;
+
+        const modalBackdrop = modalItem.querySelector('#movieModalBackdrop');
+        modalBackdrop.src = img.src; 
+
+        const modalGenres = modalItem.querySelector('#movieModalGenres');
+        modalGenres.textContent = '';
         
-        const modalFooter = exampleModal.querySelector('.modal-footer');
-        modalFooter.textContent = overview;
+
+        genresList.forEach(element => {
+            if(element != genresList[genresList.length-1])
+                modalGenres.textContent = modalGenres.textContent + `${element}, `;
+            else
+                modalGenres.textContent = modalGenres.textContent + `${element}`;
+        });
+        
+
+        const modalOverview = modalItem.querySelector('#movieModalOverview');
+        modalOverview.textContent = overview;
+        
     })
 }
 
+
 export const getTvSerieModal = () => {
 
-    const exampleModal = document.getElementById('exampleModal');
-    exampleModal.addEventListener('show.bs.modal', async function (event) {
+    const modalItem = document.getElementById('tvModal');
+    modalItem.addEventListener('show.bs.modal', async function (event) {
         
         const button = event.relatedTarget;
         const recipient = button.getAttribute('data-bs-whatever');
 
         const media = await findTvSerieById(recipient);
+        
         const title = media.name;
         const overview = media.overview;
         const backdrop = media.backdrop_path;
-
-        const modalTitle = exampleModal.querySelector('.modal-title');
-        modalTitle.textContent = title;
+        const genres = media.genres;
+        const genresList = new Array;
+        genres.forEach(element => {
+            genresList.push(element.name);
+        });        
+        const year = media.first_air_date.substring(0,4); 
         
         const img = new Image();
         img.src = `https://image.tmdb.org/t/p/w300${backdrop}`;
-        img.classList.add('img-fluid');
+        img.classList.add('poster');
 
-        const descrizione = document.createElement('div');
-        descrizione.innerHTML=overview;
+        const modalTitle = modalItem.querySelector('#tvModalTitle');
+        modalTitle.textContent = title;
 
-        const modalBody = exampleModal.querySelector('.modal-body img');
-        modalBody.src = img.src; 
+        const modalYear = modalItem.querySelector('#tvModalYear');
+        modalYear.textContent = year;
+
+        const modalBackdrop = modalItem.querySelector('#tvModalBackdrop');
+        modalBackdrop.src = img.src; 
+
+        const modalGenres = modalItem.querySelector('#tvModalGenres');
+        modalGenres.textContent = '';
+
+        genresList.forEach(element => {
+            if(element != genresList[genresList.length-1])
+                modalGenres.textContent = modalGenres.textContent + `${element}, `;
+            else
+                modalGenres.textContent = modalGenres.textContent + `${element}`;
+        });
         
-        const modalFooter = exampleModal.querySelector('.modal-footer');
-        modalFooter.textContent = overview;
+
+        const modalOverview = modalItem.querySelector('#tvModalOverview');
+        modalOverview.textContent = overview;
+        
     })
 }
 

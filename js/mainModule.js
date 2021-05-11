@@ -1,5 +1,6 @@
 import { trendingMovies, trendingTvSeries, searchMovie, searchTvSerie} from './util/fetchApi.js'
-import { makeMediaCard, addModal, getMovieModal, getTvSerieModal } from './util/dynamicCreation.js'
+import { makeMediaCard, getTvSerieModal, getMovieModal } from './util/dynamicCreation.js'
+import { storeQuery } from './util/storage.js'
 
 //funzione che genera una lista di film di tendenza
 export const callTrendingMovies = async () => {
@@ -13,7 +14,7 @@ export const callTrendingMovies = async () => {
     } catch (error) {
         console.log(error);
     }
-    addModal();
+    
     getMovieModal();
 }
 
@@ -29,40 +30,53 @@ export const callTrendingTvSeries = async () => {
     } catch (error) {
         console.log(error);
     }
-    addModal();
     getTvSerieModal();
 }
 
 
-
-
-
-
-export const searchMedia = async (event) => {
+export const storeMediaQuery = (event) => {
     event.preventDefault();
-    try {
-        const input = document.getElementById('search').value;
-        document.getElementById('movieList').innerHTML="";
-        const responseMovie = await searchMovie(input);
-        const arrayMovie = responseMovie.results;
+    const input = document.getElementById('search').value;
+    
+    storeQuery(input);
 
-        const responseTv = await searchTvSerie(input);
-        const arrayTv = responseTv.results;
-        const arrayPocho = arrayMovie.concat(arrayTv);
-        console.log(arrayPocho);
-        
-        //per ogni elemento creo una card
-        arrayPocho.forEach(element => {
-            makeMediaCard(element);
-        });
-    } catch (error) {
-        console.log(error);
-    }
+    window.location.href='./search.html';
+
 
 }
+export const submitSearch = () => document.getElementById('searchQuery').onsubmit=storeMediaQuery;
 
-document.getElementById('searchForm').onsubmit=searchMedia;
 
+export const loadSearchMovie = async (query) =>{
+    
+    try{
+        let response = await searchMovie(query);
+        const arrayMovies = response.results;
+        arrayMovies.forEach(element=>{
+            makeMediaCard(element);
+        })
+    }
+    catch(error){
+        console.log(error);
+    }
+    getMovieModal();
+}
+
+export const loadSearchTvSerie = async (query) =>{
+
+    try{
+        let response = await searchTvSerie(query);
+        const arrayTvSeries = response.results;
+
+        arrayTvSeries.forEach(element=>{
+            makeMediaCard(element);
+        })
+    }
+    catch(error){
+        console.log(error);
+    }
+    getTvSerieModal();
+}
 
 
 

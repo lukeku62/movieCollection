@@ -15,27 +15,30 @@
 
   <script type="module">
     
-    import { callTrendingMovies, storeMediaQuery, submitSearch} from "./js/mainModule.js";
+    import { loadSearchMovie, loadSearchTvSerie } from "./js/mainModule.js";
+    import { getQuery } from "./js/util/storage.js";
 
-    window.callTrendingMovies=callTrendingMovies;
-    window.storeMediaQuery=storeMediaQuery;
-    window.submitSearch=submitSearch;
+    window.loadSearchMovie=loadSearchMovie;
+    window.loadSearchTvSerie=loadSearchTvSerie;
+    window.getQuery=getQuery;
     
     
 </script>
   
 <script>
-  const callSubmitSearch = () => window.submitSearch();
-  const callTrendingMovie = () => window.callTrendingMovies();
-  const callStoreMediaQuery = () => window.storeMediaQuery();
-  
-  
+    
+    const callGetQuery = () => window.getQuery();
 
-  window.onload = () => {
-    window.callTrendingMovies();
-    callSubmitSearch();
-  }
+    window.onload = () =>{
 
+      const query = callGetQuery();
+      
+      window.loadSearchMovie(query);
+      window.loadSearchTvSerie(query);
+    }
+
+
+  
 </script>
   
   
@@ -48,14 +51,14 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Movies</a>
+              <a class="nav-link" aria-current="page" href="./index.html">Movies</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="./tvSeries.html">TV Series</a>
             </li>
             
           </ul>
-          <form class="d-flex" id="searchQuery">
+          <form class="d-flex" id="searchForm">
             <input id="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-danger" type="submit">Search</button>
           </form>
@@ -63,6 +66,8 @@
       </div>
     </nav>
 
+    
+    
     <div class="container-fluid">
 
       <div class="row justify-content-md-center row-cols-auto" id='movieList'>
@@ -71,8 +76,7 @@
 
     </div>
 
-
-    <!-- Modal -->
+    <!-- Modal Movies-->
     <div class="modal fade" id="movieModal" tabindex="-1" aria-labelledby="movieModalTitle" aria-hidden="true" style="color:black">
       <div class="modal-dialog modal-dialog'centered">
         <div class="modal-content">
@@ -110,7 +114,43 @@
       </div>
     </div>
 
-    
+    <!-- Modal TvSeries-->
+    <div class="modal fade" id="tvModal" tabindex="-1" aria-labelledby="tvModalTitle" aria-hidden="true" style="color:black">
+      <div class="modal-dialog modal-dialog'centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-title">
+              <div class="position-relative">
+                <h5 id="tvModalTitle"></h5>
+                <h6 id="tvModalYear"></h6>
+              </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col">
+                  <img src="" alt="" id="tvModalBackdrop">
+                </div>
+                <div class="col">
+                  <h6>Genres:</h6>
+                  <span id="tvModalGenres"></span>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                  <h6>Overview:</h6>
+                  <p id="tvModalOverview"></p>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Add to Watch List</button>
+            <button type="button" class="btn btn-primary">Watch</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   
 
