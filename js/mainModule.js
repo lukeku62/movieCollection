@@ -1,5 +1,5 @@
 import { trendingMovies, trendingTvSeries, searchMovie, searchTvSerie} from './util/fetchApi.js'
-import { makeMediaCard, getTvSerieModal, getMovieModal } from './util/dynamicCreation.js'
+import { makeMediaCard, getModal } from './util/dynamicCreation.js'
 import { storeQuery } from './util/storage.js'
 
 //funzione che genera una lista di film di tendenza
@@ -15,7 +15,7 @@ export const callTrendingMovies = async () => {
         console.log(error);
     }
     
-    getMovieModal();
+    getModal();
 }
 
 //funzione che crea una lista di serie tv di tendenza
@@ -30,7 +30,7 @@ export const callTrendingTvSeries = async () => {
     } catch (error) {
         console.log(error);
     }
-    getTvSerieModal();
+    getModal();
 }
 
 
@@ -59,7 +59,7 @@ export const loadSearchMovie = async (query) =>{
     catch(error){
         console.log(error);
     }
-    getMovieModal();
+    getModal();
 }
 
 export const loadSearchTvSerie = async (query) =>{
@@ -67,16 +67,31 @@ export const loadSearchTvSerie = async (query) =>{
     try{
         let response = await searchTvSerie(query);
         const arrayTvSeries = response.results;
+        
 
         arrayTvSeries.forEach(element=>{
+            
             makeMediaCard(element);
         })
     }
     catch(error){
         console.log(error);
     }
-    getTvSerieModal();
+    getModal();
 }
+
+
+export const searchMedia = (event) => {
+    
+    document.getElementById('movieList').innerHTML="";
+    event.preventDefault();
+    const input = document.getElementById('search').value;
+    
+    loadSearchMovie(input);
+    loadSearchTvSerie(input);
+
+}
+export const submitSuperSearch = () => document.getElementById('searchForm').onsubmit=searchMedia;
 
 
 

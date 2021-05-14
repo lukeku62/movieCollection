@@ -1,7 +1,7 @@
 import {findMovieById, findTvSerieById} from './fetchApi.js'
 
 //funzione che crea una card per il media
-export const makeMediaCard = (element) => {
+export const makeMediaCard = async (element) => {
     //estrazione attributi
     let title = '';
     let year = '';
@@ -12,7 +12,11 @@ export const makeMediaCard = (element) => {
     }
     else{
         title = element.name;
-        year = element.first_air_date.substring(0, 4);
+        if(element.first_air_date != undefined)
+            year = element.first_air_date.substring(0, 4);
+        else
+            year = 'Year undefined';
+
         b = false;
     }
     const poster = element.poster_path;
@@ -34,9 +38,12 @@ export const makeMediaCard = (element) => {
     card.setAttribute('type','button');
     card.setAttribute('data-bs-toggle','modal');
     if(b == true)
-        card.setAttribute('data-bs-target','#movieModal');
+        card.setAttribute('media-type','movie');
     else
-        card.setAttribute('data-bs-target','#tvModal');
+        card.setAttribute('media-type','tv');
+    
+    card.setAttribute('data-bs-target','#modal');
+
     card.setAttribute('data-bs-whatever',`${mediaId}`);
     
     //creazione immagine
@@ -44,6 +51,7 @@ export const makeMediaCard = (element) => {
     img.src = `https://image.tmdb.org/t/p/w300${poster}`;
     img.classList.add('card-image-top');
     img.classList.add('poster');
+    img.setAttribute('onerror',"this.onerror=null; this.src='/img/Sgarbi.jpg'");
     //creazione cardBody
     const cardBody = document.createElement('div');
     cardBody.classList.add('card-body');
@@ -63,107 +71,123 @@ export const makeMediaCard = (element) => {
 }
 
 
-export const getMovieModal = () => {
 
-    const modalItem = document.getElementById('movieModal');
+
+
+
+
+export const getModal = async () => {
+
+    const modalItem = document.getElementById('modal');
     modalItem.addEventListener('show.bs.modal', async function (event) {
         
         const button = event.relatedTarget;
         const recipient = button.getAttribute('data-bs-whatever');
+        const mediaType = button.getAttribute('media-type');
 
-        const media = await findMovieById(recipient);
-        const title = media.title;
-        const overview = media.overview;
-        const backdrop = media.backdrop_path;
-        const genres = media.genres;
-        const genresList = new Array;
-        genres.forEach(element => {
-            genresList.push(element.name);
-        });        
-        const year = media.release_date.substring(0,4); 
+        if(mediaType == 'movie'){
+
+            const media = await findMovieById(recipient);
+            const title = media.title;
+            const overview = media.overview;
+            const backdrop = media.backdrop_path;
+            const genres = media.genres;
+            const genresList = new Array;
+            if(genres != undefined){
+                genres.forEach(element => {
+                    genresList.push(element.name);
+                });
+            } 
+            const year = media.release_date.substring(0,4); 
         
-        const img = new Image();
-        img.src = `https://image.tmdb.org/t/p/w300${backdrop}`;
-        img.classList.add('poster');
+            const img = new Image();
+            img.src = `https://image.tmdb.org/t/p/w300${backdrop}`;
+            img.classList.add('poster');
+            
+            
 
-        const modalTitle = modalItem.querySelector('#movieModalTitle');
-        modalTitle.textContent = title;
+            const modalTitle = modalItem.querySelector('#modalTitle');
+            modalTitle.textContent = title;
 
-        const modalYear = modalItem.querySelector('#movieModalYear');
-        modalYear.textContent = year;
+            const modalYear = modalItem.querySelector('#modalYear');
+            modalYear.textContent = year;
 
-        const modalBackdrop = modalItem.querySelector('#movieModalBackdrop');
-        modalBackdrop.src = img.src; 
+            const modalBackdrop = modalItem.querySelector('#modalBackdrop');
+            modalBackdrop.src = img.src; 
 
-        const modalGenres = modalItem.querySelector('#movieModalGenres');
-        modalGenres.textContent = '';
+            const modalGenres = modalItem.querySelector('#modalGenres');
+            modalGenres.textContent = '';
+            
+
+            genresList.forEach(element => {
+                if(element != genresList[genresList.length-1])
+                    modalGenres.textContent = modalGenres.textContent + `${element}, `;
+                else
+                    modalGenres.textContent = modalGenres.textContent + `${element}`;
+            });
+            
+
+            const modalOverview = modalItem.querySelector('#modalOverview');
+            modalOverview.textContent = overview;     
+        }
+
+        else{
+            const media = await findTvSerieById(recipient);
         
-
-        genresList.forEach(element => {
-            if(element != genresList[genresList.length-1])
-                modalGenres.textContent = modalGenres.textContent + `${element}, `;
+            const title = media.name;
+            const overview = media.overview;
+            const backdrop = media.backdrop_path;
+            const genres = media.genres;
+            const genresList = new Array;
+            if(genres != undefined){
+                genres.forEach(element => {
+                    genresList.push(element.name);
+                });
+            }
+                
+            const year = media.first_air_date.substring(0,4); 
+            
+            const img = new Image();
+            const response = await fetch(`https://image.tmdb.org/t/p/w300${backdrop}`);
+            if(response.ok)
+                img.src = `https://image.tmdb.org/t/p/w300${backdrop}`;
+                
             else
-                modalGenres.textContent = modalGenres.textContent + `${element}`;
-        });
-        
+                img.src = '../../img/Sgarbi.jpg';
+            img.classList.add('poster');
+            
+            
 
-        const modalOverview = modalItem.querySelector('#movieModalOverview');
-        modalOverview.textContent = overview;
+            const modalTitle = modalItem.querySelector('#modalTitle');
+            modalTitle.textContent = title;
+
+            const modalYear = modalItem.querySelector('#modalYear');
+            modalYear.textContent = year;
+
+            const modalBackdrop = modalItem.querySelector('#modalBackdrop');
+            modalBackdrop.src = img.src; 
+
+            const modalGenres = modalItem.querySelector('#modalGenres');
+            modalGenres.textContent = '';
+
+            genresList.forEach(element => {
+                if(element != genresList[genresList.length-1])
+                    modalGenres.textContent = modalGenres.textContent + `${element}, `;
+                else
+                    modalGenres.textContent = modalGenres.textContent + `${element}`;
+            });
+            
+
+            const modalOverview = modalItem.querySelector('#modalOverview');
+            modalOverview.textContent = overview;
+        }
+
         
-    })
+    })  
+
+
+
 }
-
-
-export const getTvSerieModal = () => {
-
-    const modalItem = document.getElementById('tvModal');
-    modalItem.addEventListener('show.bs.modal', async function (event) {
-        
-        const button = event.relatedTarget;
-        const recipient = button.getAttribute('data-bs-whatever');
-
-        const media = await findTvSerieById(recipient);
-        
-        const title = media.name;
-        const overview = media.overview;
-        const backdrop = media.backdrop_path;
-        const genres = media.genres;
-        const genresList = new Array;
-        genres.forEach(element => {
-            genresList.push(element.name);
-        });        
-        const year = media.first_air_date.substring(0,4); 
-        
-        const img = new Image();
-        img.src = `https://image.tmdb.org/t/p/w300${backdrop}`;
-        img.classList.add('poster');
-
-        const modalTitle = modalItem.querySelector('#tvModalTitle');
-        modalTitle.textContent = title;
-
-        const modalYear = modalItem.querySelector('#tvModalYear');
-        modalYear.textContent = year;
-
-        const modalBackdrop = modalItem.querySelector('#tvModalBackdrop');
-        modalBackdrop.src = img.src; 
-
-        const modalGenres = modalItem.querySelector('#tvModalGenres');
-        modalGenres.textContent = '';
-
-        genresList.forEach(element => {
-            if(element != genresList[genresList.length-1])
-                modalGenres.textContent = modalGenres.textContent + `${element}, `;
-            else
-                modalGenres.textContent = modalGenres.textContent + `${element}`;
-        });
-        
-
-        const modalOverview = modalItem.querySelector('#tvModalOverview');
-        modalOverview.textContent = overview;
-        
-    })
-}
-
 
 
 

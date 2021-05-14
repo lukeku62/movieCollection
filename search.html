@@ -15,27 +15,33 @@
 
   <script type="module">
     
-    import { loadSearchMovie, loadSearchTvSerie } from "./js/mainModule.js";
+    import { searchMedia, submitSuperSearch, loadSearchMovie, loadSearchTvSerie } from "./js/mainModule.js";
     import { getQuery } from "./js/util/storage.js";
 
     window.loadSearchMovie=loadSearchMovie;
     window.loadSearchTvSerie=loadSearchTvSerie;
     window.getQuery=getQuery;
+    window.searchMedia=searchMedia;
+    window.submitSuperSearch=submitSuperSearch;
     
     
 </script>
   
 <script>
+
     
     const callGetQuery = () => window.getQuery();
-
     window.onload = () =>{
 
       const query = callGetQuery();
       
       window.loadSearchMovie(query);
       window.loadSearchTvSerie(query);
+      window.submitSuperSearch();
     }
+
+    
+    
 
 
   
@@ -67,7 +73,7 @@
     </nav>
 
     
-    
+    <!--container cards-->
     <div class="container-fluid">
 
       <div class="row justify-content-md-center row-cols-auto" id='movieList'>
@@ -76,15 +82,16 @@
 
     </div>
 
-    <!-- Modal Movies-->
-    <div class="modal fade" id="movieModal" tabindex="-1" aria-labelledby="movieModalTitle" aria-hidden="true" style="color:black">
+    
+    <!-- Modal -->
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true" style="color:black">
       <div class="modal-dialog modal-dialog'centered">
         <div class="modal-content">
           <div class="modal-header">
             <div class="modal-title">
               <div class="position-relative">
-                <h5 id="movieModalTitle"></h5>
-                <h6 id="movieModalYear"></h6>
+                <h5 id="modalTitle"></h5>
+                <h6 id="modalYear"></h6>
               </div>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -93,17 +100,17 @@
             <div class="container-fluid">
               <div class="row">
                 <div class="col">
-                  <img src="" alt="" id="movieModalBackdrop">
+                  <img src="" alt="" id="modalBackdrop" >
                 </div>
                 <div class="col">
                   <h6>Genres:</h6>
-                  <span id="movieModalGenres"></span>
+                  <span id="modalGenres"></span>
                 </div>
               </div>
               <br>
               <div class="row">
                   <h6>Overview:</h6>
-                  <p id="movieModalOverview"></p>
+                  <p id="modalOverview"></p>
               </div>
           </div>
           <div class="modal-footer">
@@ -114,43 +121,7 @@
       </div>
     </div>
 
-    <!-- Modal TvSeries-->
-    <div class="modal fade" id="tvModal" tabindex="-1" aria-labelledby="tvModalTitle" aria-hidden="true" style="color:black">
-      <div class="modal-dialog modal-dialog'centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <div class="modal-title">
-              <div class="position-relative">
-                <h5 id="tvModalTitle"></h5>
-                <h6 id="tvModalYear"></h6>
-              </div>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col">
-                  <img src="" alt="" id="tvModalBackdrop">
-                </div>
-                <div class="col">
-                  <h6>Genres:</h6>
-                  <span id="tvModalGenres"></span>
-                </div>
-              </div>
-              <br>
-              <div class="row">
-                  <h6>Overview:</h6>
-                  <p id="tvModalOverview"></p>
-              </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Add to Watch List</button>
-            <button type="button" class="btn btn-primary">Watch</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    
 
   
 
