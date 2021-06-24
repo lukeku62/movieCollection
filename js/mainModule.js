@@ -1,7 +1,7 @@
 import { trendingMovies, trendingTvSeries, searchMovie, searchTvSerie} from './util/fetchApi.js'
 import { makeMediaCard, getModal } from './util/dynamicCreation.js'
 import { storeQuery } from './util/storage.js'
-import { Amplify } from 'aws-amplify'
+import { Amplify } from 'aws-amplify' 
 import { config } from '.aws-exports'
 Amplify.configure(config)
 
